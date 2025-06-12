@@ -2,57 +2,88 @@ import React from 'react';
 
 const PropertyCard = ({ properties }) => {
   return (
-    <div className="w-[70%] h-[79.5vh] overflow-y-auto p-[2vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {properties.map((property) => (
-        <div
-          key={property.id}
-          className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg transition-transform transform hover:-translate-y-2 hover:shadow-2xl duration-300 cursor-pointer group"
-        >
-          <div className="relative">
-            <img
-              src={property.coverPhoto?.url || 'https://via.placeholder.com/400x300'}
-              alt="property"
-              className="w-full h-[12vw] object-cover rounded-xl group-hover:scale-105 transition duration-300"
-            />
-            {property.isVerified && (
-              <span className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                ✅ Verified
-              </span>
-            )}
-          </div>
+    <div className="w-full lg:w-3/4 h-screen overflow-y-auto p-6 bg-gray-50">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        {properties.map((property) => (
+          <div
+            key={property.id}
+            className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group border border-gray-100 overflow-hidden"
+          >
+            <div className="relative overflow-hidden">
+              <img
+                src={property.coverPhoto?.url || 'https://via.placeholder.com/400x300'}
+                alt="property"
+                className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              {property.isVerified && (
+                <div className="absolute top-3 left-3 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+                  <span>✅</span>
+                  <span className="font-medium">Verified</span>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
 
-          <div className="mt-4 space-y-1">
-            <h3 className="text-md font-bold text-gray-800 dark:text-white">
-              {property.title?.slice(0, 50)}...
-            </h3>
-            <p className="text-blue-600 dark:text-blue-300 font-semibold text-sm">
-              AED {property.price.toLocaleString()}
-              {property.rentFrequency ? ` / ${property.rentFrequency}` : ''}
-            </p>
-            <p className="text-gray-600 dark:text-gray-400 text-xs">
-              🛏 {property.rooms} &nbsp;&nbsp; 🛁 {property.baths} &nbsp;&nbsp; 📐 {property.area.toFixed(0)} sqft
-            </p>
-
-            {property.furnishingStatus && (
-              <p className="text-xs inline-block mt-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-500 dark:text-gray-300">
-                {property.furnishingStatus}
-              </p>
-            )}
-
-            {/* ⭐ Star Rating */}
-            {property.starRating && (
-              <p className="text-yellow-500 text-sm flex items-center">
-                {Array.from({ length: property.starRating }, (_, i) => (
-                  <span key={i}>⭐</span>
-                ))}
-                <span className="ml-1 text-gray-500 dark:text-gray-300">
-                  ({property.starRating})
+            <div className="p-5 space-y-3">
+              <h3 className="text-lg font-bold text-gray-800 leading-tight line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
+                {property.title?.slice(0, 60)}...
+              </h3>
+              
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-blue-600">
+                  {new Intl.NumberFormat('en-AE', {
+                    style: 'currency',
+                    currency: 'AED',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  }).format(property.price)}
                 </span>
-              </p>
-            )}
+                {property.rentFrequency && (
+                  <span className="text-sm text-gray-500 font-medium">
+                    / {property.rentFrequency}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-4 text-sm text-gray-600">
+                <div className="flex items-center gap-1">
+                  <span className="text-blue-500">🛏️</span>
+                  <span className="font-medium">{property.rooms}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-blue-500">🛁</span>
+                  <span className="font-medium">{property.baths}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-blue-500">📐</span>
+                  <span className="font-medium">{property.area?.toFixed(0)} sqft</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                {property.furnishingStatus && (
+                  <span className="inline-block px-3 py-1 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full text-xs font-medium text-gray-700 border border-gray-200">
+                    🏠 {property.furnishingStatus}
+                  </span>
+                )}
+
+                {property.starRating && (
+                  <div className="flex items-center gap-1">
+                    <div className="flex">
+                      {Array.from({ length: property.starRating }, (_, i) => (
+                        <span key={i} className="text-yellow-400 text-sm">⭐</span>
+                      ))}
+                    </div>
+                    <span className="text-xs text-gray-500 font-medium ml-1">
+                      ({property.starRating})
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
